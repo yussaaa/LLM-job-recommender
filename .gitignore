@@ -1,0 +1,16 @@
+.DS_Store
+
+.env 
+venv/
+
+
+!infra/terraform.tfstate
+!infra/main.tf
+
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate.backup
+
+
+
+
