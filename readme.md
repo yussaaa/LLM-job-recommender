@@ -3,3 +3,5 @@
 https://chalice-workshop.readthedocs.io/en/latest/index.html
 
 [Link to GitRepo](https://github.com/aws-samples/chalice-workshop/tree/master/code/todo-app/part1/03-add-dynamodb)
+
+[APIFY ref](https://docs.apify.com/api/client/python/docs/quick-start)
