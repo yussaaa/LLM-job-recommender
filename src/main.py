@@ -1,12 +1,13 @@
 from apify.apify_actor_call import run_actor
 from apify.scrapped_formatting import filter_full_job_info
-from aws.opensearch import save_to_index, create_index
+
+# from aws.opensearch import save_to_index, create_index
 from aws.opensearch_class import OpenSearch_custom
 
 import os
 from dotenv import load_dotenv
 
-load_dotenv("../.env")
+load_dotenv()
 
 
 default_index_name = "llm-jobs-index"
@@ -37,8 +38,11 @@ def main():
     # Create the index if not exist
     os_client.create_index(index_name=default_index_name)
 
-
-if __name__ == "__main__":
     jobs = apify_get_clean()
 
     print(jobs)
+    return jobs
+
+
+if __name__ == "__main__":
+    main()
