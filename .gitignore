@@ -1,19 +1,15 @@
+# Ignore files and directories
 .DS_Store
 __pycache__/
-
-.env 
+.env
 venv/
-
-
-!infra/terraform.tfstate
-!infra/main.tf
-
 .terraform/
 .terraform.lock.hcl
 terraform*
-
 *.tfvars
+.chalice/
+src/spotify_ETL.egg-info/
 
-
-
-
+# Include specific files
+!infra/terraform.tfstate
+!infra/main.tf
