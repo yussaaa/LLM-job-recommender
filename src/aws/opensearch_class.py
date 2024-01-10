@@ -11,8 +11,8 @@ class OpenSearch_custom:
     ):
         self.hosts = host
         self.awsauth = AWS4Auth(
-            os.getenv("AWS_ACCOUNT_ID"),
-            os.getenv("AWS_ACCESS_KEY"),
+            os.getenv("AWS_ACCESS_KEY_ID"),
+            os.getenv("AWS_SECRET_ACCESS_KEY"),
             "us-east-2",
             service,
             session_token=credentials.token,
