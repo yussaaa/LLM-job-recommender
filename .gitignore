@@ -8,7 +8,7 @@ venv/
 terraform*
 *.tfvars
 .chalice/
-src/spotify_ETL.egg-info/
+*.egg-info/
 
 # Include specific files
 !infra/terraform.tfstate
