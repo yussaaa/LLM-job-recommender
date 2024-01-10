@@ -10,6 +10,6 @@ def filter_full_job_info(job):
     ]
     job_filtered = {key: job[key] for key in keys_to_filter}
     job_filtered["applyLink"] = job["applyLink"]["link"]
-    job_filtered["metadata"] = "".join(job["metadata"].values())
+    # job_filtered["metadata"] = "".join(job["metadata"].values())
 
     return job_filtered
