@@ -1,0 +1,15 @@
+# Ignore files and directories
+.DS_Store
+__pycache__/
+.env
+venv/
+.terraform/
+.terraform.lock.hcl
+terraform*
+*.tfvars
+.chalice/
+*.egg-info/
+
+# Include specific files
+!infra/terraform.tfstate
+!infra/main.tf

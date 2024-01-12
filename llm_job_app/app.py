@@ -1,5 +1,5 @@
 from chalice import Chalice
-from src.main import main
+from chalicelib.main import main
 import json
 
 app = Chalice(app_name="job_rec_app")
