@@ -1,8 +1,8 @@
-from apify.apify_actor_call import run_actor
-from apify.scrapped_formatting import filter_full_job_info
+from chalicelib.apify.apify_actor_call import run_actor
+from chalicelib.apify.scrapped_formatting import filter_full_job_info
 
 # from aws.opensearch import save_to_index, create_index
-from aws.opensearch_class import OpenSearch_custom
+from chalicelib.aws.opensearch_class import OpenSearch_custom
 
 import os
 from dotenv import load_dotenv
