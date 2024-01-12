@@ -17,7 +17,8 @@ os_client = OpenSearch_custom(host=host)
 
 
 def apify_get_clean():
-    jobs = run_actor()
+    query_URL = "https://www.google.com/search?q=data+science,+data+engineer,+ml+engineer,+data+analyst+jobs+in+Canada&oq=google+jobs&gs_lcrp=EgZjaHJvbWUqCggCEAAYsQMYgAQyDggAEEUYJxg7GIAEGIoFMgYIARBFGEAyCggCEAAYsQMYgAQyCggDEAAYkgMYgAQyCggEEAAYsQMYgAQyBggFEEUYPDIGCAYQRRhBMgYIBxBFGEHSAQg0MTM3ajBqN6gCALACAA&sourceid=chrome&ie=UTF-8&ibp=htl;jobs&sa=X&ved=2ahUKEwiSkb2Ov4uDAxWRIDQIHWImCI0QudcGKAF6BAggECo&sxsrf=AM9HkKnL3kWnQdaFMTTB0VMmiGhqogChaA:1702438898722#fpstate=tldetail&htivrt=jobs&htidocid=7c4eIMdkJKl3S8qlAAAAAA%3D%3D"
+    jobs = run_actor(query_URL)
     batch_jobs = []
     for page in jobs:
         jobs_info = page["googleJobs"]

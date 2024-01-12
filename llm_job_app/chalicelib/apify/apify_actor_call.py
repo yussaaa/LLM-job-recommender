@@ -23,14 +23,14 @@ APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 # TODO: Add parameters on job filters, job titles, location, etc.
 
 
-def run_actor():
+def run_actor(query_URL):
     # Initialize the ApifyClient with your API token
     client = ApifyClient(APIFY_TOKEN)
 
     # Prepare the Actor input
     run_input = {
-        "queries": "Teacher\nhttps://www.google.com/search?q=doctor&ibp=htl;jobs",
-        "maxPagesPerQuery": 1,
+        "queries": query_URL,
+        "maxPagesPerQuery": 100,
         "csvFriendlyOutput": False,
         "languageCode": "",
         "maxConcurrency": 10,
@@ -41,9 +41,5 @@ def run_actor():
 
     # Run the Actor and wait for it to finish
     run = client.actor("SpK8RxKhIgV6BWOz9").call(run_input=run_input)
-
-    # Fetch and print Actor results from the run's dataset (if there are any)
-    # for item in client.dataset(run["defaultDatasetId"]).iterate_items():
-    #     print(item)
 
     return client.dataset(run["defaultDatasetId"]).list_items().items
