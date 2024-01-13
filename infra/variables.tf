@@ -12,3 +12,14 @@ variable "account_id" {
 variable "domain" {
   default = "parsed-jobs-opensearch"
 }
+
+variable "OS_master_user_name" {
+  description = "Master user name for OpenSearch"
+  type        = string
+}
+
+variable "OS_master_user_password" {
+  description = "Master user password for OpenSearch"
+  type        = string
+}
+
