@@ -42,4 +42,20 @@ def run_actor(query_URL):
     # Run the Actor and wait for it to finish
     run = client.actor("SpK8RxKhIgV6BWOz9").call(run_input=run_input)
 
-    return client.dataset(run["defaultDatasetId"]).list_items().items
+    parsed_jobs = client.dataset(run["defaultDatasetId"]).list_items().items
+
+    return parsed_jobs
+
+
+if __name__ == "__main__":
+    query = "data science or data engineer or machine learning engineer jobs in Canada"
+    q_string = query.replace(" ", "+")
+    query_URL = f"https://www.google.com/search?q={q_string}&oq=google+jobs&ibp=htl;jobs&htivrt=jobs&htichips=date_posted:today&htischips=date_posted;today"
+
+    parsed_jobs = run_actor(query_URL)
+
+    num_pages_parsed = len(parsed_jobs)
+    jobs_per_page = parsed_jobs[0]["searchQuery"]["resultsPerPage"]
+    print(
+        f"\nActor finished, approximately {num_pages_parsed} pages x {jobs_per_page} jobs/page = {num_pages_parsed * jobs_per_page} jobs are parsed."
+    )

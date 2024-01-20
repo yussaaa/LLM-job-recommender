@@ -63,3 +63,62 @@ class OpenSearch_custom:
             print(response)
         except Exception as e:
             print(e)
+
+
+if __name__ == "__main__":
+    host = "search-ui-test-j4slt3fz7uu5ahsm6vgu3hwqem.us-east-2.es.amazonaws.com"
+    os_client = OpenSearch_custom(host=host)
+    index_name = "parsed-jobs-index"
+    os_client.create_index(index_name=index_name)
+    # job_parsed = {\n  "job_basics": {\n    "title": "Sr Data Engineer",\n    "company": "Royal Bank of Canada",\n    "industry": "Banking/Financial Services",\n    "location": "Toronto, ON, Canada",\n    "years_of_experience_required": "5+ years",\n    "employment_type": "Full-time",\n    "source": "Jobs At RBC",\n    "application_link": "https://jobs.rbc.com/ca/en/job/R-0000076286/Sr-Data-Engineer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic"\n  },\n  "required_skills": {\n    "programming_languages": ["Python", "SQL"],\n    "data_visualization_tools": [],\n    "databases": ["NoSQL", "SQL databases"],\n    "web_development": {\n      "front_end_technologies": [],\n      "back_end_technologies": []\n    },\n    "devops_tools": [],\n    "statistical_analysis_methods": [],\n    "machine_learning_frameworks": [],\n    "machine_learning_operations": [],\n    "cloud_platforms": ["Azure", "Snowflake"],\n    "big_data_technologies": ["Hadoop", "PySpark"],\n    "natural_language_processing": [],\n    "deep_learning_concepts": [],\n    "data_engineering_tools": ["ETL/ELT workflows"],\n    "large_models": []\n  },\n  "company_culture": [\n    "diversity and inclusion",\n    "equitable workplace",\n    "coaching and mentoring"\n  ],\n  "job_benefits": {\n    "salary_range": "",\n    "salary_currency": "CAD",\n    "paid_time_off": "",\n    "retirement_plan_matching": false,\n    "professional_development_budget": "",\n    "employee_discounts": "",\n    "remote_work_policy": {\n      "fully_remote_option": false,\n      "partial_remote_option": "",\n      "work_from_anywhere_program": ""\n    },\n    "relocation_support": ""\n  }\n}\n```'
+    job_parsed = {
+        "job_basics": {
+            "title": "Sr Data Engineer",
+            "company": "Royal Bank of Canada",
+            "industry": "Banking/Financial Services",
+            "location": "Toronto, ON, Canada",
+            "years_of_experience_required": "5+ years",
+            "employment_type": "Full-time",
+            "source": "Jobs At RBC",
+            "application_link": "https://jobs.rbc.com/ca/en/job/R-0000076286/Sr-Data-Engineer?utm_campaign=google_jobs_apply&utm_source=google_jobs_apply&utm_medium=organic",
+        },
+        "required_skills": {
+            "programming_languages": ["Python", "SQL"],
+            "data_visualization_tools": [],
+            "databases": ["NoSQL", "SQL databases"],
+            "web_development": {
+                "front_end_technologies": [],
+                "back_end_technologies": [],
+            },
+            "devops_tools": [],
+            "statistical_analysis_methods": [],
+            "machine_learning_frameworks": [],
+            "machine_learning_operations": [],
+            "cloud_platforms": ["Azure", "Snowflake"],
+            "big_data_technologies": ["Hadoop", "PySpark"],
+            "natural_language_processing": [],
+            "deep_learning_concepts": [],
+            "data_engineering_tools": ["ETL/ELT workflows"],
+            "large_models": [],
+        },
+        "company_culture": [
+            "diversity and inclusion",
+            "equitable workplace",
+            "coaching and mentoring",
+        ],
+        "job_benefits": {
+            "salary_range": "",
+            "salary_currency": "CAD",
+            "paid_time_off": "",
+            "retirement_plan_matching": False,
+            "professional_development_budget": "",
+            "employee_discounts": "",
+            "remote_work_policy": {
+                "fully_remote_option": False,
+                "partial_remote_option": "",
+                "work_from_anywhere_program": "",
+            },
+            "relocation_support": "",
+        },
+    }
+    os_client.save_to_index(job_parsed, index_name=index_name)
