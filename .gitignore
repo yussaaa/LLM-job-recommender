@@ -3,6 +3,7 @@
 __pycache__/
 .env
 venv/
+*.pdf
 .terraform/
 .terraform.lock.hcl
 terraform*
