@@ -32,10 +32,8 @@ json_parsed_sample = {
         "programming_languages": ["Python", "Rust", "Go", "JavaScript"],
         "data_visualization_tools": ["Tableau", "PowerBI", "Looker"],
         "databases": ["PostgreSQL", "MySQL", "MongoDB"],
-        "web_development": {
-            "front_end_technologies": ["HTML", "CSS", "React"],
-            "back_end_technologies": ["Node.js", "Django", "Flask"],
-        },
+        "web_dev_front_end": ["HTML", "CSS", "React"],
+        "web_dev_back_end": ["Node.js", "Django", "Flask"],
         "devops_tools": ["Git", "Docker", "Kubernetes"],
         "statistical_analysis_methods": ["Linear Regression", "Logistic Regression"],
         "machine_learning_frameworks": [
