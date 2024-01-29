@@ -4,7 +4,7 @@ from apify.scrapped_formatting import filter_full_job_info
 # from aws.opensearch import save_to_index, create_index
 from aws.opensearch import OpenSearch_custom
 
-from llm_chain.custom_chain import JobParserLLM, json_parsed_sample
+from llm_chain.chain.parser_job import JobParserLLM, json_sample_schema_job
 from llm_chain.embedding import EmbeddingModel
 from llm_chain.embedding_feature_prepare_job import filter_skills_and_job
 
@@ -12,6 +12,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import time
+from tqdm import tqdm
 
 import sys
 
@@ -28,16 +29,16 @@ import sys
 load_dotenv()
 
 
-index_name = "jobs-index"  # "llm-jobs-index"
+index_name = "jobs-index-vector"  # "llm-jobs-index"
 
 host = "search-ui-test-j4slt3fz7uu5ahsm6vgu3hwqem.us-east-2.es.amazonaws.com"
 
 os_client = OpenSearch_custom(host=host)
-chat = JobParserLLM(model="gpt-3.5-turbo-1106")
+chat_job = JobParserLLM(model="gpt-3.5-turbo-1106")
 embedder = EmbeddingModel(model="text-embedding-ada-002")
 
 
-def apify_get_clean(query_URL):
+def apify_opensearch_ETL(query_URL):
     jobs = run_actor(query_URL)
     batch_jobs = []
     start_time = time.time()  # Start time
@@ -45,16 +46,18 @@ def apify_get_clean(query_URL):
 
     print(f"Total number of pages to be processed: {total_pages}")
 
-    for page_num, page in enumerate(jobs):
+    for page_num, page in tqdm(enumerate(jobs), desc="Outer Loop", ncols=100):
         jobs_info = page["googleJobs"]
 
-        for job in jobs_info:
+        for job in tqdm(jobs_info, desc=" Inner Loop", leave=False, ncols=100):
             # Clean the data
             # job = filter_full_job_info(job)
 
             try:
                 # Parse the job description
-                job_parsed = chat.parse(job, json_parsed_sample=json_parsed_sample)
+                job_parsed = chat_job.parse(
+                    job, json_sample_schema=json_sample_schema_job
+                )
                 job_info_to_embedd = filter_skills_and_job(job_parsed)
 
                 # Embed the job description
@@ -69,7 +72,7 @@ def apify_get_clean(query_URL):
 
             batch_jobs.append(job_parsed)
 
-        print(f"{page_num} / {total_pages} finished.")
+        print(f"{page_num + 1} / {total_pages} finished.")
 
     end_time = time.time()  # End time
     elapsed_time = end_time - start_time  # Time spent
@@ -89,7 +92,7 @@ def main():
     q_string = query.replace(" ", "+")
     query_URL = f"https://www.google.com/search?q={q_string}&oq=google+jobs&ibp=htl;jobs&htivrt=jobs&htichips=date_posted:today&htischips=date_posted;today"
 
-    jobs = apify_get_clean(query_URL)
+    jobs = apify_opensearch_ETL(query_URL)
 
     # print(jobs)
     return jobs
