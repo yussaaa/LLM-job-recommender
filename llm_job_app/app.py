@@ -14,6 +14,15 @@ def index():
     return {"200": "Success!"}
 
 
+@app.schedule("cron(0 0 * * ? *)")
+def cron_job(event):
+    jobs = run_job_scrapper_ETL()
+    if not jobs:
+        return {"400": "No jobs found"}
+
+    return {"200": "Success!"}
+
+
 # The view function above will return {"hello": "world"}
 # whenever you make an HTTP GET request to '/'.
 #
