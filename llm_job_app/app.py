@@ -1,5 +1,5 @@
 from chalice import Chalice
-from chalicelib.main import main
+from chalicelib.main import run_job_scrapper_ETL
 import json
 
 app = Chalice(app_name="job_rec_app")
@@ -7,7 +7,7 @@ app = Chalice(app_name="job_rec_app")
 
 @app.route("/")
 def index():
-    jobs = main()
+    jobs = run_job_scrapper_ETL()
     if not jobs:
         return {"400": "No jobs found"}
 

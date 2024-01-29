@@ -84,7 +84,7 @@ def apify_opensearch_ETL(query_URL):
     return batch_jobs
 
 
-def main():
+def run_job_scrapper_ETL():
     # Create the index if not exist
     os_client.create_index(index_name=index_name)
 
@@ -99,4 +99,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_job_scrapper_ETL()
