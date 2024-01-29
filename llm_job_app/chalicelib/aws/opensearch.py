@@ -75,7 +75,35 @@ class OpenSearch_custom:
         except Exception as e:
             print(e)
 
-    def search(self, index_name: str, query: str, size: int = 5):
+    def search(
+        self,
+        index_name: str,
+        query: str,
+        search_field: list = ["job.title"],
+        size: int = 5,
+    ):
+        """Searches the specified index for the given query.
+
+        Args:
+            index_name (str): The name of the index to search.
+            query (str): The query string to search for.
+            search_field (list, optional): The list of fields to search within. Defaults to ["job.title"].
+            size (int, optional): The maximum number of search results to return. Defaults to 5.
+
+        Returns:
+            dict: The search results as a dictionary.
+        """
+        try:
+            query_formatted = {
+                "size": size,
+                "query": {"multi_match": {"query": query, "fields": search_field}},
+            }
+            response = self.client.search(index=index_name, body=query_formatted)
+            return response
+        except Exception as e:
+            print(e)
+
+    def search_vector(self, index_name: str, query: list, size: int = 5):
         """Search the index for the query
 
         Args:
@@ -88,7 +116,7 @@ class OpenSearch_custom:
         try:
             query_formated = {
                 "size": size,
-                "query": {"multi_match": {"query": query, "fields": ["job.title"]}},
+                "query": {"knn": {"embedding": {"vector": query, "k": 10}}},
             }
             response = self.client.search(index=index_name, body=query_formated)
             return response
