@@ -1,23 +1,11 @@
-from langchain.llms import OpenAI
-from langchain.chains import LLMChain
-from langchain.chat_models import ChatOpenAI
+from llm_chain.chain.parser import ParserLLM
+from langchain.prompts import PromptTemplate
 from langchain.prompts.chat import (
-    ChatPromptTemplate,
     SystemMessagePromptTemplate,
-    AIMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
-from langchain.schema import AIMessage, HumanMessage, SystemMessage
-from langchain.prompts import PromptTemplate
 
-import ast
-import json
-
-
-# TODO: Infer the company industry from the company name
-
-
-json_parsed_sample = {
+json_sample_schema_job = {
     "job": {
         "title": "Machine Learning Engineer",
         "company": "Google",
@@ -27,6 +15,7 @@ json_parsed_sample = {
         "employment_type": "Full-time",
         "source": "LinkedIn",
         "application_link": "https://...",
+        "description": "Detailed job description goes here...",
     },
     "skills": {
         "programming_languages": ["Python", "Rust", "Go", "JavaScript"],
@@ -76,100 +65,38 @@ json_parsed_sample = {
     },
 }
 
-# "description": "Detailed job description goes here...",
-# "full_text_of_benefits": "Full description of all benefits offered...",
-# "posted_date": "2023-12-21",
-# "posted_relative_date (days ago)": "2",
 
-
-class JobParserLLM:
-    def __init__(
-        self, model="gpt-3.5-turbo-1106", temperature=0.1, max_tokens=3000, **kwargs
-    ):
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
-        self.chat = self.__init_llm()
-
-    def __init_llm(self):
-        return ChatOpenAI(
-            model=self.model, temperature=self.temperature, max_tokens=self.max_tokens
-        )
-
-    def parse(self, json_jd, json_parsed_sample):
-        system_message_prompt = SystemMessagePromptTemplate(
+class JobParserLLM(ParserLLM):
+    def get_system_message_prompt(self, json_sample_schema):
+        return SystemMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="As an AI assistant, your task is to parse job descriptions into a Python dictionary literal. \
               Upon receiving a job description, extract the pertinent details and categorize them under the corresponding keys in the dictionary, similar to the provided example. \
               If the job description does not explicitly mention a certain field, assign an empty string to that field. \
               Ensure that the output is a dictionary object, following the structure of the example provided. \
-              {json_parsed_sample} \ Note: The job description may not contain all the necessary information. Only populate the fields for which information is explicitly given or can be inferred with reasonable confidence.",
-                input_variables=["json_parsed_sample"],
+              {json_sample_schema} \ Note: The job description may not contain all the necessary information. Only populate the fields for which information is explicitly given or can be inferred with reasonable confidence.",
+                input_variables=["json_sample_schema"],
             )
         )
 
-        # system_message_prompt_part1 = SystemMessagePromptTemplate(
-        #     prompt=PromptTemplate(
-        #         template="As an AI assistant, your task is to parse job descriptions into a structured python dictionary object. \
-        #           Upon receiving a job description, extract the pertinent details and categorize them under the corresponding keys in the dictionary, similar to the provided example. \
-        #           If the job description does not explicitly mention a certain field, use your AI capabilities to infer the information. If inference is not possible, assign an empty string to that field. \
-        #           Ensure that the output is a dictionary object, following the structure of the example provided. \
-        #           Note: The job description may not contain all the necessary information. Only populate the fields for which information is explicitly given or can be inferred with reasonable confidence.",
-        #         input_variables=[],
-        #     )
-        # )
-
-        # system_message_prompt_part2 = SystemMessagePromptTemplate(
-        #     prompt=PromptTemplate(
-        #         template="{json_parsed_sample}",
-        #         input_variables=["json_parsed_sample"],
-        #     )
-        # )
-
-        human_message_prompt = HumanMessagePromptTemplate(
+    def get_human_message_prompt(self, json):
+        return HumanMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="The following is the job description \n {json}?",
                 input_variables=["json"],
             )
         )
-        chat_prompt_template = ChatPromptTemplate.from_messages(
-            [system_message_prompt, human_message_prompt]
-            # [
-            #     system_message_prompt_part1,
-            #     system_message_prompt_part2,
-            #     human_message_prompt,
-            # ]
-        )
-        chain = LLMChain(llm=self.chat, prompt=chat_prompt_template)
 
-        max_attempts = 3
-        attempts = 0
-
-        while attempts < max_attempts:
-            try:
-                parsed_jd = chain.run(
-                    json_parsed_sample=json_parsed_sample, json=json_jd
-                )
-                job_data_dict = ast.literal_eval(parsed_jd)
-                return job_data_dict
-            except Exception as e:
-                attempts += 1
-                print("----------------------------------------")
-                print(f"Attempt {attempts} failed with error: {e}")
-                if attempts < max_attempts:
-                    print("Retrying...")
-                else:
-                    print("Max attempts reached. Handling error.")
-                    print(f"When processing this job: \n{json_jd}")
-                    print("----------------------------------------")
+    # def run_chain(self, chain, json_sample_schema, json_input):
+    #     return chain.run(json_sample_schema=json_sample_schema, json=json_input)
 
 
 if __name__ == "__main__":
-    chat = JobParserLLM(model="gpt-3.5-turbo-1106")
+    chat_job = JobParserLLM(model="gpt-3.5-turbo-1106")
 
     # with open("data/output.json", "r") as f:
-    #     json_jd = json.load(f)
-    # # sample_jd = json_jd[0]["googleJobs"][0]
+    #     json_input = json.load(f)
+    # # sample_jd = json_input[0]["googleJobs"][0]
 
     sample_jd = {
         "title": "Machine Learning Engineer - Canada",
@@ -199,5 +126,7 @@ if __name__ == "__main__":
         },
     }
 
-    parsed_jd = chat.parse(json_jd=sample_jd, json_parsed_sample=json_parsed_sample)
+    parsed_jd = chat_job.parse(
+        json_input=sample_jd, json_sample_schema=json_sample_schema_job
+    )
     print(type(parsed_jd), "\n", parsed_jd)
