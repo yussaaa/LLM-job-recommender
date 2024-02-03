@@ -119,9 +119,6 @@ class JobParserLLM(ParserLLM):
             )
         )
 
-    # def run_chain(self, chain, json_sample_schema, json_input):
-    #     return chain.run(json_sample_schema=json_sample_schema, json=json_input)
-
 
 if __name__ == "__main__":
     chat_job = JobParserLLM(model="gpt-3.5-turbo-1106")

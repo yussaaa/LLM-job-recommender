@@ -1,6 +1,5 @@
 from chalice import Chalice
 from chalicelib.main import run_job_scrapper_ETL
-import json
 
 app = Chalice(app_name="job_rec_app")
 

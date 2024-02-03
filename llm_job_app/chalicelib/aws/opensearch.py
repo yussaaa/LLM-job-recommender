@@ -1,8 +1,7 @@
 import boto3
-import requests
 import os
 from requests_aws4auth import AWS4Auth
-from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
+from opensearchpy import OpenSearch, RequestsHttpConnection
 
 
 class OpenSearch_custom:

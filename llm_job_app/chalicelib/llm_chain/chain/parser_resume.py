@@ -101,9 +101,6 @@ class ResumeParserLLM(ParserLLM):
             )
         )
 
-    # def run_chain(self, chain, json_sample_schema, json_resume):
-    #     return chain.run(json_sample_schema=json_sample_schema, json=json_resume)
-
 
 if __name__ == "__main__":
     chat_resume = ResumeParserLLM(model="gpt-3.5-turbo-1106")
