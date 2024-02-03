@@ -24,6 +24,15 @@ APIFY_TOKEN = os.getenv("APIFY_TOKEN")
 
 
 def run_actor(query_URL):
+    """
+    Runs an Apify actor to scrape job data from a given query URL.
+
+    Args:
+        query_URL (str): The URL of the query to scrape job data from.
+
+    Returns:
+        list: A list of parsed job data.
+    """
     # Initialize the ApifyClient with your API token
     client = ApifyClient(APIFY_TOKEN)
 

@@ -67,7 +67,30 @@ json_sample_schema_job = {
 
 
 class JobParserLLM(ParserLLM):
+    """
+    This class represents a job parser for the LLM chain.
+
+    It provides methods to parse job descriptions into a Python dictionary literal,
+    extract pertinent details, and categorize them under the corresponding keys in the dictionary.
+
+    Attributes:
+        None
+
+    Methods:
+        get_system_message_prompt(json_sample_schema): Returns a system message prompt template.
+        get_human_message_prompt(json): Returns a human message prompt template.
+    """
+
     def get_system_message_prompt(self, json_sample_schema):
+        """
+        Returns a system message prompt template.
+
+        Args:
+            json_sample_schema (str): The JSON sample schema.
+
+        Returns:
+            SystemMessagePromptTemplate: The system message prompt template.
+        """
         return SystemMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="As an AI assistant, your task is to parse job descriptions into a Python dictionary literal. \
@@ -80,6 +103,15 @@ class JobParserLLM(ParserLLM):
         )
 
     def get_human_message_prompt(self, json):
+        """
+        Returns a human message prompt template.
+
+        Args:
+            json (str): The JSON job description.
+
+        Returns:
+            HumanMessagePromptTemplate: The human message prompt template.
+        """
         return HumanMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="The following is the job description \n {json}?",

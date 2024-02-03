@@ -39,6 +39,16 @@ embedder = EmbeddingModel(model="text-embedding-ada-002")
 
 
 def apify_opensearch_ETL(query_URL):
+    """
+    Extracts job information from a given query URL and performs ETL (Extract, Transform, Load) operations on the data.
+
+    Args:
+        query_URL (str): The URL of the query to fetch job information from.
+
+    Returns:
+        list: A list of dictionaries representing the extracted and transformed job data.
+    """
+
     jobs = run_actor(query_URL)
     batch_jobs = []
     start_time = time.time()  # Start time
@@ -85,6 +95,16 @@ def apify_opensearch_ETL(query_URL):
 
 
 def run_job_scrapper_ETL():
+    """
+    Runs the job scrapper ETL process.
+
+    This function creates an index if it doesn't exist, constructs a query URL based on the given query,
+    and performs web scraping using the Apify OpenSearch API. The scraped job data is returned.
+
+    Returns:
+        list: A list of job data scraped from the web.
+    """
+
     # Create the index if not exist
     os_client.create_index(index_name=index_name)
 

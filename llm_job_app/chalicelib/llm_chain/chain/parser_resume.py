@@ -48,7 +48,31 @@ json_sample_schema_resume = {
 
 
 class ResumeParserLLM(ParserLLM):
+    """
+    A class that represents a resume parser for LLM.
+
+    This class provides methods to parse resumes into a Python dictionary literal.
+    It extracts pertinent details such as personal information, skills, education, and work experience,
+    and categorizes them under the corresponding keys in the dictionary.
+
+    Attributes:
+        None
+
+    Methods:
+        get_system_message_prompt(json_sample_schema): Returns a system message prompt template.
+        get_human_message_prompt(json): Returns a human message prompt template.
+    """
+
     def get_system_message_prompt(self, json_sample_schema):
+        """
+        Returns a system message prompt template.
+
+        Args:
+            json_sample_schema (str): The JSON sample schema.
+
+        Returns:
+            SystemMessagePromptTemplate: The system message prompt template.
+        """
         return SystemMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="As an AI assistant, your task is to parse resumes into a Python dictionary literal. \
@@ -61,6 +85,15 @@ class ResumeParserLLM(ParserLLM):
         )
 
     def get_human_message_prompt(self, json):
+        """
+        Returns a human message prompt template.
+
+        Args:
+            json (str): The JSON resume.
+
+        Returns:
+            HumanMessagePromptTemplate: The human message prompt template.
+        """
         return HumanMessagePromptTemplate(
             prompt=PromptTemplate(
                 template="The following is the resume \n {json}",

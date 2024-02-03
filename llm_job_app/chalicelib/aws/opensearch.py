@@ -6,6 +6,27 @@ from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 
 
 class OpenSearch_custom:
+    """
+    A custom class for interacting with OpenSearch.
+
+    Args:
+        host (str): The host URL of the OpenSearch cluster.
+        service (str, optional): The service name. Defaults to "es".
+        credentials (boto3.Session().get_credentials(), optional): The AWS credentials. Defaults to None.
+
+    Attributes:
+        hosts (str): The host URL of the OpenSearch cluster.
+        awsauth (AWS4Auth): The AWS authentication object.
+        client (OpenSearch): The OpenSearch client.
+
+    Methods:
+        _creat_client: Creates an OpenSearch client.
+        save_to_index: Saves data to an OpenSearch index.
+        create_index: Creates an OpenSearch index.
+        search: Searches an OpenSearch index.
+        search_vector: Searches an OpenSearch index using vector search.
+    """
+
     def __init__(
         self, host, service="es", credentials=boto3.Session().get_credentials()
     ):
@@ -20,6 +41,15 @@ class OpenSearch_custom:
         self.client = self._creat_client(self.hosts)
 
     def _creat_client(self, host):
+        """
+        Creates an OpenSearch client.
+
+        Args:
+            host (str): The host URL of the OpenSearch cluster.
+
+        Returns:
+            OpenSearch: The OpenSearch client.
+        """
         return OpenSearch(
             hosts=[{"host": host, "port": 443}],
             http_auth=self.awsauth,
@@ -29,11 +59,12 @@ class OpenSearch_custom:
         )
 
     def save_to_index(self, dict_data: dict, index_name: str):
-        """Save the data to OpenSearch index
+        """
+        Saves the data to an OpenSearch index.
 
         Args:
-            dict_data (dict): data to be saved
-            index_name (str): index name
+            dict_data (dict): The data to be saved.
+            index_name (str): The index name.
         """
         try:
             # Save the dictionary to OpenSearch
@@ -49,6 +80,12 @@ class OpenSearch_custom:
             print()
 
     def create_index(self, index_name: str):
+        """
+        Creates an OpenSearch index.
+
+        Args:
+            index_name (str): The index name.
+        """
         # Create an index with non-default settings.
         # https://docs.aws.amazon.com/opensearch-service/latest/developerguide/sizing-domains.html#bp-sharding
         # shards should correspond to 10-30GB where search latency is objective
@@ -82,7 +119,8 @@ class OpenSearch_custom:
         search_field: list = ["job.title"],
         size: int = 5,
     ):
-        """Searches the specified index for the given query.
+        """
+        Searches the specified index for the given query.
 
         Args:
             index_name (str): The name of the index to search.
@@ -104,14 +142,16 @@ class OpenSearch_custom:
             print(e)
 
     def search_vector(self, index_name: str, query: list, size: int = 5):
-        """Search the index for the query
+        """
+        Searches the index for the query using vector search.
 
         Args:
-            index_name (str): index name
-            query (dict): query
+            index_name (str): The index name.
+            query (list): The query.
+            size (int, optional): The maximum number of search results to return. Defaults to 5.
 
         Returns:
-            dict: search results
+            dict: The search results as a dictionary.
         """
         try:
             query_formated = {

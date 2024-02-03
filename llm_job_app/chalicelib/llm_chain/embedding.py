@@ -3,6 +3,12 @@ from openai import OpenAI
 
 class EmbeddingModel:
     def __init__(self, model: str = "text-embedding-ada-002"):
+        """
+        Initialize the EmbeddingModel class.
+
+        Args:
+            model (str, optional): The name of the model to use for embedding. Defaults to "text-embedding-ada-002".
+        """
         self.model = model
         self.client = OpenAI()
 
