@@ -1,13 +1,21 @@
 from chalice import Chalice
-from src.main import main
-import json
+from chalicelib.main import run_job_scrapper_ETL
 
 app = Chalice(app_name="job_rec_app")
 
 
 @app.route("/")
 def index():
-    jobs = main()
+    jobs = run_job_scrapper_ETL()
+    if not jobs:
+        return {"400": "No jobs found"}
+
+    return {"200": "Success!"}
+
+
+@app.schedule("cron(0 0 * * ? *)")
+def cron_job(event):
+    jobs = run_job_scrapper_ETL()
     if not jobs:
         return {"400": "No jobs found"}
 

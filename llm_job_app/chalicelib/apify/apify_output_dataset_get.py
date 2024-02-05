@@ -1,7 +1,4 @@
-import os
 import requests
-import json
-import boto3
 
 
 def get_dataset_by_id(id: str, APIFY_TOKEN: str):

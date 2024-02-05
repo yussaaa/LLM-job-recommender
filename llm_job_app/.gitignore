@@ -3,14 +3,12 @@
 __pycache__/
 .env
 venv/
-*.pdf
 .terraform/
 .terraform.lock.hcl
 terraform*
 *.tfvars
 .chalice/
 *.egg-info/
-*.pdf
 
 # Include specific files
 !infra/terraform.tfstate
