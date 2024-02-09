@@ -10,6 +10,7 @@ terraform*
 *.tfvars
 .chalice/
 *.egg-info/
+*.pdf
 
 # Include specific files
 !infra/terraform.tfstate
